@@ -11,6 +11,8 @@
 #include <NaluEnv.h>
 #include <InterfaceBalancer.h>
 
+#include <Ioad_Initializer.h>
+
 // percept
 #if defined (NALU_USES_PERCEPT)
 #include <adapt/AdaptedMeshVerifier.hpp>
@@ -2101,7 +2103,11 @@ Realm::create_output_mesh()
       resultsFileIndex_ = ioBroker_->create_output_mesh( oname, stk::io::WRITE_RESULTS, *outputInfo_->outputPropertyManager_, "catalyst" );
    }
    else {
-      resultsFileIndex_ = ioBroker_->create_output_mesh( oname, stk::io::WRITE_RESULTS, *outputInfo_->outputPropertyManager_);
+      Ioad::Initializer(); // ADIOS2
+      //Iohb::IOFactory::factory(); // HeartBeat
+      NaluEnv::self().naluOutputP0()<<oname<<std::endl;
+      resultsFileIndex_ = ioBroker_->create_output_mesh( oname, stk::io::WRITE_RESULTS, *outputInfo_->outputPropertyManager_, "adios");
+      //resultsFileIndex_ = ioBroker_->create_output_mesh( oname, stk::io::WRITE_RESULTS, *outputInfo_->outputPropertyManager_);
    }
 
 #if defined (NALU_USES_PERCEPT)
